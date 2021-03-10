@@ -1,0 +1,18 @@
+{
+  "name": "temp-monitoring",
+  "version": "1.0.0",
+  "description": "Cypress test for monitoring cold storage devices",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx cypress run --spec cypress/integration/storage/index.spec.js",
+    "open": "node_modules/.bin/cypress open"
+  },
+  "author": "mledom",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^6.6.0"
+  },
+  "dependencies": {
+    "nodejs-nodemailer-outlook": "^1.2.3"
+  }
+}
