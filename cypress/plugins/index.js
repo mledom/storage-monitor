@@ -19,18 +19,29 @@
 //   // `on` is used to hook into various events Cypress emits
 //   // `config` is the resolved Cypress config
 // }
-
+const dotenvPlugin = require('cypress-dotenv');
 const nodeoutlook = require('nodejs-nodemailer-outlook');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = (on, config) => {
+  config = dotenvPlugin(config);
+  on('after:run', (results) => {
+    results.runs[0].tests.forEach(t => {
+      const filename = t.attempts[0].screenshots[0].path;
+      const base = path.basename(filename);
+      fs.createReadStream(filename).pipe(fs.createWriteStream(`${process.env.DROPBOX_FOLDER}\\${base}`));
+    });
+    return config;
+  });
   on('task', {
     // deconstruct the individual properties
     email({ file }) {
       const mailOptions = {
-        from: 'april.ledom@iresearchatlanta.com',
-        to: ['mledom.accounts@gmail.com'],
+        from: process.env.SMTP_USER,
+        to: [process.env.TO_EMAIL],
         subject: 'Automated Cold Storage Monitor',
-        text: 'Screenshot taken',
+        text: `Screenshot taken ${new Date().toLocaleString()}`,
         attachments: [{
           path: file
         }],
@@ -44,5 +55,6 @@ module.exports = (on, config) => {
       nodeoutlook.sendEmail(mailOptions);
       return null;
     }
-  })
+  });
+  return config;
 }
