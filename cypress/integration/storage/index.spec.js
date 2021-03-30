@@ -6,6 +6,8 @@ describe("Cold Storage Monitor", () => {
   it("Visits the Main Dashboard", () => {
     cy.viewport(1000, 1000);
     cy.visit(mainPage);
+    cy.wait(2000);
+    cy.contains('Sensaphone Web600');
     const date = new Date().toISOString().slice(0, 10);
     cy.screenshot(date);
     const file = `./cypress/screenshots/storage/index.spec.js/${date}.png`;
