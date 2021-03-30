@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx cypress run --spec cypress/integration/storage/index.spec.js",
     "open": "node_modules/.bin/cypress open",
-    "start": "npx cypress run --spec .\\cypress\\integration\\storage\\index.spec.js"
+    "start": "npx cypress run --spec .\\cypress\\integration\\storage\\index.spec.js",
+    "start-mac": "npx cypress run --spec ./cypress/integration/storage/index.spec.js"
   },
   "author": "mledom",
   "license": "ISC",
@@ -16,6 +17,7 @@
   "dependencies": {
     "cypress-dotenv": "^1.2.2",
     "dotenv": "^8.2.0",
-    "nodejs-nodemailer-outlook": "^1.2.3"
+    "nodejs-nodemailer-outlook": "^1.2.3",
+    "nodemailer": "^6.5.0"
   }
 }
