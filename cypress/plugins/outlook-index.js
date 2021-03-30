@@ -20,7 +20,7 @@
 //   // `config` is the resolved Cypress config
 // }
 const dotenvPlugin = require('cypress-dotenv');
-const nodemailer = require('nodemailer');
+const nodeoutlook = require('nodejs-nodemailer-outlook');
 const fs = require('fs');
 const path = require('path');
 
@@ -30,38 +30,29 @@ module.exports = (on, config) => {
     results.runs[0].tests.forEach(t => {
       const filename = t.attempts[0].screenshots[0].path;
       const base = path.basename(filename);
-      fs.createReadStream(filename).pipe(fs.createWriteStream(`${process.env.DROPBOX_FOLDER}/${base}`));
+      fs.createReadStream(filename).pipe(fs.createWriteStream(`${process.env.DROPBOX_FOLDER}\\${base}`));
     });
     return config;
   });
   on('task', {
     // deconstruct the individual properties
     email({ file }) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PWD,
-        }
-      });
-      
       const mailOptions = {
         from: process.env.SMTP_USER,
-        to: process.env.TO_EMAIL,
+        to: [process.env.TO_EMAIL],
         subject: 'Automated Cold Storage Monitor',
         text: `Screenshot taken ${new Date().toLocaleString()}`,
         attachments: [{
           path: file
         }],
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PWD,
+        },
+        onError: (e) => console.log(`Error: ${e}`),
+        onSuccess: (i) => console.log(`Success ${i}`)
       };
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log('Email failed: ' + error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
+      nodeoutlook.sendEmail(mailOptions);
       return null;
     }
   });
