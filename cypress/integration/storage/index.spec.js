@@ -8,6 +8,10 @@ describe("Cold Storage Monitor", () => {
     cy.visit(mainPage);
     cy.wait(2000);
     cy.contains('Sensaphone Web600');
+    const content = cy.get("#stable td.info").should(($p) => {
+      expect($p).to.have.length(5);
+      return $p;
+    });
     const date = new Date().toISOString().slice(0, 10);
     cy.screenshot(date);
     const file = `./cypress/screenshots/storage/index.spec.js/${date}.png`;
