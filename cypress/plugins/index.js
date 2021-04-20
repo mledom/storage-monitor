@@ -30,7 +30,7 @@ module.exports = (on, config) => {
     const date = new Date().toISOString().slice(0, 10);
     results.runs[0].tests.forEach(t => {
       const filename = `${t.attempts[0].screenshots[0].path}`;
-      const base = path.basename(filename);
+      var base = path.basename(filename);
       if (!base.includes(date)) {
           base = `${date}-${base}`;
       }
