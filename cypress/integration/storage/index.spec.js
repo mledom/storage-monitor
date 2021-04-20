@@ -9,6 +9,7 @@ describe('Cold Storage Monitor', () => {
         cy.wait(2000);
         cy.contains('Sensaphone Web600');
         const content = cy.get('#stable td.info').should(($p) => {
+            cy.wait(5000);
             expect($p).to.have.length.of.at.most(1);
             return $p;
         });
