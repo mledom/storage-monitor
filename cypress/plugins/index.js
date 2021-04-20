@@ -27,9 +27,13 @@ const path = require('path');
 module.exports = (on, config) => {
   config = dotenvPlugin(config);
   on('after:run', (results) => {
+    const date = new Date().toISOString().slice(0, 10);
     results.runs[0].tests.forEach(t => {
-      const filename = t.attempts[0].screenshots[0].path;
+      const filename = `${t.attempts[0].screenshots[0].path}`;
       const base = path.basename(filename);
+      if (!base.includes(date)) {
+          base = `${date}-${base}`;
+      }
       fs.createReadStream(filename).pipe(fs.createWriteStream(`${process.env.DROPBOX_FOLDER}/${base}`));
     });
     return config;
